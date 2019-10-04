@@ -21,41 +21,37 @@ __author__ = "Will collab with Brett"
 
 # +++your code here+++
 special_paths = []
+
+
 def get_special_paths(directory):
     special_paths = []
-    path = os.getcwd() 
-    #new_dir_log = os.listdir(path)
     new_dir_log = os.listdir(directory)
-    #print(new_dir_log)
     for filename in new_dir_log:
         specials = re.search(r'__(\w+)__', filename)
         if specials:
             special_paths.append(os.path.abspath(filename))
-        
-
-
     return special_paths
+
+
 def copy_to(new_dir_log, directory):
     if not os.path.exists(directory):
         os.mkdir(directory)
     for f in new_dir_log:
         file_name = os.path.basename(f)
-        shutil.copy(f,os.path.join(directory, file_name))
+        shutil.copy(f, os.path.join(directory, file_name))
+
 
 def zip_to(new_dir_log, zippath):
-    cmd= 'zip -j ' + zippath +' '+' '.join(new_dir_log)
+    cmd = 'zip -j ' + zippath + ' ' + ' '.join(new_dir_log)
     print("Command is:" + cmd)
     cmd_split = cmd.split()
     try:
         subprocess.check_output(cmd_split)
     except subprocess.CalledProcessError as e:
-        
         print(e.output)
         exit(1)
-    
-    
-    
 # Write functions and modify main() to call them
+
 
 def main():
     # This snippet will help you get started with the argparse module.
@@ -73,22 +69,20 @@ def main():
     # Read the docs and examples for the argparse module about how to do this.
 
     # Parsing command line arguments is a must-have skill.
-    # This is input data validation.  If something is wrong (or missing) with any
+    # This is input data validation.
+    # If something is wrong (or missing) with any
     # required args, the general rule is to print a usage message and exit(1).
 
     # +++your code here+++
     # Call your functions
-    get_path =  get_special_paths(directory)
-    new_path = []
-
-    
-    targetdir = ''
+    get_path = get_special_paths(directory)
     if todir:
         copy_to(get_path, todir)
     elif tozip:
         zip_to(get_path, tozip)
     else:
         print("\n".join(get_path))
+
 
 if __name__ == "__main__":
     main()
